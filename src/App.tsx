@@ -1,11 +1,9 @@
-import { Demo } from "@/components/Demo";
+import { Layout } from "@/components/Layout";
 import "./App.css";
 
 function App() {
   return (
-    <div className="container">
-      <Demo />
-    </div>
+    <Layout />
   );
 }
 

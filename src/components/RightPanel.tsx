@@ -86,7 +86,7 @@ export function RightPanel() {
 
 function ActionButton({ icon: Icon, label, color }: { icon: any, label: string, color: string }) {
   return (
-    <button className={`flex flex-col items-center justify-center gap-1 rounded p-2 hover:bg-gray-50 ${color}`}>
+    <button className={`flex flex-col items-center justify-center gap-1 rounded p-1.5 hover:bg-gray-50 ${color}`}>
       <Icon className="h-4 w-4" />
       <span className="text-[10px] font-medium">{label}</span>
     </button>

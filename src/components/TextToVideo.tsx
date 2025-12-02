@@ -1,6 +1,26 @@
 import { Rocket, CreditCard } from "lucide-react";
+import { open } from "@tauri-apps/plugin-dialog";
+import { useState } from "react";
 
 export function TextToVideo() {
+  const [outputFolder, setOutputFolder] = useState("C:\\Users\\chung\\Desktop\\Veo3Output");
+
+  const handleSelectFolder = async () => {
+    try {
+      const selected = await open({
+        directory: true,
+        multiple: false,
+        defaultPath: outputFolder,
+      });
+      
+      if (selected && typeof selected === "string") {
+        setOutputFolder(selected);
+      }
+    } catch (error) {
+      console.error("Failed to open dialog:", error);
+    }
+  };
+
   return (
     <div className="flex h-full flex-col gap-4 p-4">
       <div className="flex-1 rounded-lg border bg-white p-4 shadow-sm">
@@ -21,7 +41,7 @@ export function TextToVideo() {
       </div>
 
       <div className="flex gap-4">
-        <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-indigo-600 py-3 text-sm font-bold text-white shadow-sm hover:bg-indigo-700">
+        <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2 text-sm font-bold text-white shadow-sm hover:bg-indigo-700">
           <Rocket className="h-4 w-4" />
           BẮT ĐẦU TẠO VIDEO
         </button>
@@ -31,7 +51,7 @@ export function TextToVideo() {
           <label htmlFor="1080p" className="text-sm font-medium text-gray-700">1080p</label>
         </div>
 
-        <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-500 py-3 text-sm font-bold text-white shadow-sm hover:bg-cyan-600">
+        <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-500 py-2 text-sm font-bold text-white shadow-sm hover:bg-cyan-600">
           <CreditCard className="h-4 w-4" />
           MUA GÓI CƯỚC
         </button>
@@ -50,8 +70,11 @@ export function TextToVideo() {
         <div className="rounded-lg border bg-white p-3 shadow-sm">
           <div className="mb-1 text-xs text-gray-500">Chọn thư mục lưu video</div>
           <div className="flex items-center gap-2">
-            <span className="truncate text-sm text-gray-600">C:\Users\chung\Desktop\Veo3Output</span>
-            <button className="ml-auto text-gray-400 hover:text-gray-600">
+            <span className="truncate text-sm text-gray-600" title={outputFolder}>{outputFolder}</span>
+            <button 
+              onClick={handleSelectFolder}
+              className="ml-auto text-gray-400 hover:text-gray-600"
+            >
               📂
             </button>
           </div>

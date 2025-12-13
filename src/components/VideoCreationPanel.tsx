@@ -2,7 +2,11 @@ import { Rocket, CreditCard } from "lucide-react";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useState } from "react";
 
-export function TextToVideo() {
+interface VideoCreationPanelProps {
+  mode: string; // To differentiate or show specific content if needed later
+}
+
+export function VideoCreationPanel({ mode }: VideoCreationPanelProps) {
   const [outputFolder, setOutputFolder] = useState("C:\\Users\\chung\\Desktop\\Veo3Output");
 
   const handleSelectFolder = async () => {
@@ -22,7 +26,14 @@ export function TextToVideo() {
   };
 
   return (
-    <div className="flex h-full flex-col gap-4 p-4">
+    <div className="flex h-full flex-col gap-4 px-4 pb-4 pt-2">
+      {/* 
+          Placeholder for specific tab content if requested later.
+          For 'text-to-video', it's just the shared prompt.
+          For 'image-to-video', user said prompt is shared.
+          We can add a slot here if needed.
+       */}
+       
       <div className="flex-1 rounded-lg border bg-white p-4 shadow-sm">
         <textarea
           className="h-full w-full resize-none border-none bg-transparent p-0 text-sm focus:outline-none"

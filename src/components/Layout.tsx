@@ -1,38 +1,69 @@
 import { useState } from "react";
 import { Header } from "./Header";
-import { TextToVideo } from "./TextToVideo";
+import { VideoCreationPanel } from "./VideoCreationPanel";
 import { RightPanel } from "./RightPanel";
 
 export function Layout() {
   const [activeTab, setActiveTab] = useState("text-to-video");
+  const [rightPanelWidth, setRightPanelWidth] = useState(400);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Handle resizing
+  const startResizing = () => {
+    setIsDragging(true);
+  };
+
+  const stopResizing = () => {
+    setIsDragging(false);
+  };
+
+  const resize = (e: MouseEvent) => {
+    if (isDragging) {
+      const newWidth = window.innerWidth - e.clientX;
+      if (newWidth > 200 && newWidth < 800) { // Min/Max constraints
+        setRightPanelWidth(newWidth);
+      }
+    }
+  };
 
   return (
-    <div className="flex h-screen flex-col bg-gray-100 font-sans text-gray-900">
+    <div 
+      className={`flex h-screen flex-col bg-gray-100 font-sans text-gray-900 ${isDragging ? 'cursor-col-resize select-none' : ''}`}
+      onMouseMove={(e) => isDragging && resize(e.nativeEvent)}
+      onMouseUp={stopResizing}
+      onMouseLeave={stopResizing} 
+    >
+      {/* 
+         Note: moving mouse resizing to the container div for simplicity. 
+         Ideally window listeners are better but this works if user stays in window.
+      */}
+      
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <div className="flex flex-1 overflow-hidden">
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto">
-          {activeTab === "text-to-video" && <TextToVideo />}
-          {activeTab === "image-to-video" && (
-            <div className="flex h-full items-center justify-center text-gray-500">
-              Chức năng Image to Video đang phát triển
-            </div>
-          )}
-          {activeTab === "start-end" && (
-            <div className="flex h-full items-center justify-center text-gray-500">
-              Chức năng Start-End đang phát triển
-            </div>
-          )}
-          {activeTab === "character-sync" && (
-            <div className="flex h-full items-center justify-center text-gray-500">
-              Chức năng Đồng bộ nhân vật đang phát triển
-            </div>
+          
+          {/* Shared Video Creation Panel for multiple modes */}
+          {(activeTab === "text-to-video" || 
+            activeTab === "image-to-video" || 
+            activeTab === "start-end" || 
+            activeTab === "character-sync") && (
+            <VideoCreationPanel mode={activeTab} />
           )}
         </div>
 
+        {/* Drag Handle */}
+        <div 
+          className="w-1 cursor-col-resize bg-gray-200 hover:bg-blue-400 active:bg-blue-600 transition-colors z-20"
+          onMouseDown={startResizing}
+        />
+
         {/* Right Panel */}
-        <div className="w-[400px] flex-shrink-0">
+        <div 
+          className="flex-shrink-0"
+          style={{ width: rightPanelWidth }}
+        >
           <RightPanel />
         </div>
       </div>
